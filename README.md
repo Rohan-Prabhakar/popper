@@ -360,11 +360,3 @@ class CustomValidationAgent(ValidationAgent):
    - Use **UCB-V** for complex testing environments
 
 4. **Interpret Results**: Focus on weakness types with high mean rewards and consider reducing tests on consistently low-performing types.
-
-## License
-
-MIT License
-
-## Contributing
-
-Contributions welcome! Please feel free to submit issues and pull requests.
