@@ -237,7 +237,7 @@ agent = ValidationAgent(weakness_types=custom_weaknesses)
 ## Architecture
 
 ```
-<img width="3259" height="2779" alt="mermaid-diagram-2026-04-20-192141" src="https://github.com/user-attachments/assets/6b899f45-d764-463a-bd0a-9f6f876f1bda" />
+<img width="3259" height="2779" alt="mermaid-diagram-2026-04-20-192141" src="https://github.com/user-attachments/assets/30191cd8-515e-4bf6-973c-ce241a629bfc" />
 
 ```
 
