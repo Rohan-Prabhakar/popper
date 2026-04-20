@@ -237,43 +237,8 @@ agent = ValidationAgent(weakness_types=custom_weaknesses)
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                  Three-Stage Pipeline                           │
-│                                                                 │
-│  Stage 1: Seed Libraries                                        │
-│  ┌───────────────────────────────────────────────────────┐     │
-│  │  JSONL File A + JSONL File B → Unified Prompt Library │     │
-│  └──────────────────────────┬────────────────────────────┘     │
-│                             │                                   │
-│  Stage 2: Generator         ▼                                   │
-│  ┌───────────────────────────────────────────────────────┐     │
-│  │  Groq + Llama 3.3 70B → Dynamic Adversarial Prompts  │     │
-│  └──────────────────────────┬────────────────────────────┘     │
-│                             │                                   │
-│  Stage 3: Target & Judge    ▼                                   │
-│  ┌───────────────────────────────────────────────────────┐     │
-│  │  HuggingFace Inference API → Score (0.0–1.0)          │     │
-│  └──────────────────────────┬────────────────────────────┘     │
-│                             │                                   │
-│                    UCB Bandit Feedback Loop                     │
-└─────────────────────────────────────────────────────────────────┘
+<img width="3259" height="2779" alt="mermaid-diagram-2026-04-20-192141" src="https://github.com/user-attachments/assets/6b899f45-d764-463a-bd0a-9f6f876f1bda" />
 
-┌─────────────────────────────────────────────────────┐
-│              ValidationAgent                        │
-│  ┌─────────────────────────────────────────────┐   │
-│  │           UCBBandit (Algorithm)             │   │
-│  │  ┌─────────┬─────────┬─────────┐           │   │
-│  │  │  UCB1   │ UCB1-   │  UCB-V  │           │   │
-│  │  │         │ Tuned   │         │           │   │
-│  │  └─────────┴─────────┴─────────┘           │   │
-│  └─────────────────────────────────────────────┘   │
-│                                                     │
-│  Arms (Weakness Types):                            │
-│  • Logical Inconsistency  • Factual Error          │
-│  • Bias                    • Safety Violation      │
-│  • Prompt Injection        • Hallucination         │
-│  • Context Loss            • Reasoning Failure     │
-└─────────────────────────────────────────────────────┘
 ```
 
 ## Reward Design
