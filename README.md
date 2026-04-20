@@ -1,17 +1,17 @@
 # Popper - Multi-Agent Reinforcement Learning Validation System
 
-A comprehensive reinforcement learning system for Popper's validation agents featuring **single-agent UCB learning**, **multi-agent coordination**, and **statistical comparison** with baseline methods.
+A comprehensive reinforcement learning system for Popper's validation agents featuring **single-agent UCB learning**, **multi-agent coordination**, **statistical comparison** with baseline methods, and a **three-stage adversarial testing pipeline** with dynamic prompt generation and semantic evaluation.
 
-## 🎯 Assignment Coverage
+## Assignment Coverage
 
 This project fulfills the CS285 Final Project requirements:
 
-### ✅ Two RL Approaches Implemented:
+### Two RL Approaches Implemented:
 1. **Value-Based Learning (UCB Algorithms)**: Q-learning style value estimation with UCB1, UCB1-Tuned, and UCB-V
 2. **Exploration Strategies**: Contextual bandits with variance-aware exploration bonuses
 3. **Multi-Agent Reinforcement Learning**: Coordinated learning across specialized agent teams with reward sharing
 
-### ✅ Agentic System Integration:
+### Agentic System Integration:
 - **Agent Orchestration**: Dynamic task allocation across 5 specialized Popper agent roles
 - **Research/Analysis Agents**: Learning effective information gathering and vulnerability detection strategies
 
@@ -23,17 +23,72 @@ This system implements multi-armed bandit algorithms to intelligently balance te
 
 **Philosophical Foundation**: Based on Karl Popper's principle of falsifiability - "Good tests kill flawed theories; we remain alive to guess again." The system embodies computational skepticism by systematically seeking evidence both for and against AI system reliability.
 
-## 🚀 Quick Start
+---
 
+## Three-Stage Adversarial Testing Pipeline
+
+This system goes significantly beyond the original Popper framework by introducing a fully adaptive adversarial testing pipeline. While the original Popper sends static, hard-coded prompts to a target model and checks for failures, this system adds an intelligent feedback loop that makes testing faster and more effective over time.
+
+### How It Differs from Original Popper
+
+| Dimension | Original Popper | This System |
+|-----------|----------------|-------------|
+| **Prompt Source** | Static, hard-coded list | Dynamic (Live API generation) + Large Seed Library |
+| **Selection Strategy** | Fixed Round-Robin | Adaptive RL (UCB Bandit) that learns which weaknesses work best |
+| **Judging Method** | Deterministic Rules (Regex/Keywords) | LLM-as-Judge (Semantic understanding) |
+| **Scoring** | Binary (Pass/Fail) | Continuous Score (0.0–1.0) with severity levels |
+| **Goal** | Find any bug | Optimize discovery rate of specific weakness types |
+
+**The Core Difference:**
+
+> **Original Popper:** "Try Prompt A, then B, then C... did it crash? Yes/No."
+>
+> **This System:** "Based on past results, Weakness Type X has 80% success rate. Generate a new prompt for X, evaluate semantically, update strategy."
+
+While input (prompt) and output (failure score) remain the same, this system adds an intelligent feedback loop.
+
+---
+
+### Stage 1 — Seed Libraries
+
+Two JSONL files are merged into one unified library containing adversarial prompts and vulnerability examples. This library serves as the knowledge base for dynamic prompt generation, grounding new prompts in known attack patterns and edge cases.
+
+### Stage 2 — Generator
+
+Using **Groq with Llama 3.3 70B Instruct** for fast, dynamic prompt generation. The generator:
+- Uses seed library examples as grounding context
+- Accepts specific weakness types as targeting parameters
+- Produces novel adversarial prompts that go beyond the static seed set
+- Feeds generated prompts into the RL selection loop for adaptive prioritization
+
+### Stage 3 — Target & Judge
+
+Using the **Hugging Face Inference API** to:
+- Execute generated prompts against target models
+- Evaluate responses with dedicated judge models using semantic understanding (not keyword matching)
+- Produce continuous vulnerability scores (0.0–1.0) with severity classification
+- Feed scores back into the UCB bandit to update weakness-type value estimates
+
+The complete pipeline generates fresh adversarial prompts, tests them against target models, scores responses for vulnerabilities, and provides real-time reports with full visibility into generated prompts, model responses, and evaluation results.
+
+---
+
+## Quick Start
+
+### Running the App
+
+**1. Start the backend:**
 ```bash
-# Run the complete demo with all three components
-python rl_validation_agent.py
-
-# Output includes:
-# 1. Single-agent UCB learning demonstration
-# 2. Multi-agent coordinated testing campaign
-# 3. Statistical comparison: RL vs Baseline (original Popper without RL)
+python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
+
+**2. Start the frontend (in a separate terminal):**
+```bash
+cd nextjs-ui
+npm run dev
+```
+
+
 
 ## Integration with Popper Framework
 
@@ -49,7 +104,7 @@ This RL validation system integrates with the [Popper Framework](https://github.
 
 The RL agent provides adaptive orchestration, learning which validation approaches are most effective for specific AI systems.
 
-## 📊 Comparison with Original Popper (Without RL)
+## Comparison with Original Popper (Without RL)
 
 The system includes a built-in comparison experiment that demonstrates:
 
@@ -57,8 +112,8 @@ The system includes a built-in comparison experiment that demonstrates:
 |--------|-------------------|------------------------|-------------|
 | Success Rate | ~31% ± 4% | ~28% ± 6% | **+12% relative** |
 | Cumulative Reward | ~16.6 ± 3.1 | ~13.5 ± 4.8 | **+3.1 points** |
-| Adaptivity | ✅ Learns optimal strategy | ❌ Fixed pattern | - |
-| Efficiency | ✅ Focuses on high-yield tests | ❌ Uniform distribution | - |
+| Adaptivity | Learns optimal strategy | No Fixed pattern | - |
+| Efficiency | Focuses on high-yield tests | No Uniform distribution | - |
 
 Run `run_comparison_experiment()` to see statistically significant results across multiple runs.
 
@@ -182,6 +237,27 @@ agent = ValidationAgent(weakness_types=custom_weaknesses)
 ## Architecture
 
 ```
+┌─────────────────────────────────────────────────────────────────┐
+│                  Three-Stage Pipeline                           │
+│                                                                 │
+│  Stage 1: Seed Libraries                                        │
+│  ┌───────────────────────────────────────────────────────┐     │
+│  │  JSONL File A + JSONL File B → Unified Prompt Library │     │
+│  └──────────────────────────┬────────────────────────────┘     │
+│                             │                                   │
+│  Stage 2: Generator         ▼                                   │
+│  ┌───────────────────────────────────────────────────────┐     │
+│  │  Groq + Llama 3.3 70B → Dynamic Adversarial Prompts  │     │
+│  └──────────────────────────┬────────────────────────────┘     │
+│                             │                                   │
+│  Stage 3: Target & Judge    ▼                                   │
+│  ┌───────────────────────────────────────────────────────┐     │
+│  │  HuggingFace Inference API → Score (0.0–1.0)          │     │
+│  └──────────────────────────┬────────────────────────────┘     │
+│                             │                                   │
+│                    UCB Bandit Feedback Loop                     │
+└─────────────────────────────────────────────────────────────────┘
+
 ┌─────────────────────────────────────────────────────┐
 │              ValidationAgent                        │
 │  ┌─────────────────────────────────────────────┐   │
