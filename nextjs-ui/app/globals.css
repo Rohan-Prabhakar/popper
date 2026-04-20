@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --admin-sidebar: #1e293b;
+  --admin-sidebar-hover: #334155;
+  --admin-primary: #365cf5;
+  --admin-primary-hover: #2a4acb;
+  --admin-surface: #f5f7fb;
+  --admin-card: #ffffff;
+  --admin-border: #e2e8f0;
+  --admin-text: #1e293b;
+  --admin-muted: #64748b;
+}
+
+body {
+  color: var(--admin-text);
+  background: var(--admin-surface);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Scrollbar — sidebar reports */
+.reports-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.reports-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
