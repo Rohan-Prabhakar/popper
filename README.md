@@ -2,9 +2,8 @@
 
 A comprehensive reinforcement learning system for Popper's validation agents featuring **single-agent UCB learning**, **multi-agent coordination**, **statistical comparison** with baseline methods, and a **three-stage adversarial testing pipeline** with dynamic prompt generation and semantic evaluation.
 
-## Assignment Coverage
+## Objectives
 
-This project fulfills the CS285 Final Project requirements:
 
 ### Two RL Approaches Implemented:
 1. **Value-Based Learning (UCB Algorithms)**: Q-learning style value estimation with UCB1, UCB1-Tuned, and UCB-V
