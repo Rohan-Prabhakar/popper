@@ -1,3 +1,17 @@
+Metadata-Version: 2.4
+Name: popper-rl
+Version: 0.1.0
+Summary: UCB adaptive validation orchestration — plug-in layer for Humanitariansai/Popper-style agents
+Author: Popper RL contributors
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.24.0
+Provides-Extra: api
+Requires-Dist: fastapi>=0.109.0; extra == "api"
+Requires-Dist: uvicorn[standard]>=0.27.0; extra == "api"
+Requires-Dist: pydantic>=2.5.0; extra == "api"
+
 # Popper - Multi-Agent Reinforcement Learning Validation System
 
 A comprehensive reinforcement learning system for Popper's validation agents featuring **single-agent UCB learning**, **multi-agent coordination**, and **statistical comparison** with baseline methods.
@@ -36,8 +50,6 @@ python rl_validation_agent.py
 ```
 
 ## Integration with Popper Framework
-
-**Plug-in guide:** install `popper_rl` with `pip install -e .` and implement `PopperTestExecutor` to call your Popper agents — see [PLUGIN.md](PLUGIN.md).
 
 This RL validation system integrates with the [Popper Framework](https://github.com/Humanitariansai/Popper), an open-source platform for computational skepticism and AI validation. It works alongside:
 

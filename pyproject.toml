@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "popper-rl"
+version = "0.1.0"
+description = "UCB adaptive validation orchestration — plug-in layer for Humanitariansai/Popper-style agents"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Popper RL contributors" }]
+dependencies = [
+    "numpy>=1.24.0",
+]
+
+[project.optional-dependencies]
+api = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.5.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["popper_rl*"]
