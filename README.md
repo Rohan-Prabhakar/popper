@@ -85,6 +85,7 @@ python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 **2. Start the frontend (in a separate terminal):**
 ```bash
 cd nextjs-ui
+npm install
 npm run dev
 ```
 
